@@ -70,6 +70,44 @@ const runSeeder = async () => {
     }
     const [drGeneral, drCardio, drPediatrician, drDermatologist, drENT] = docs;
 
+    console.log('⏰ Creating Schedule Slots for Doctors...');
+    // Create DoctorAvailability model import if not present... wait, I need to check if it's imported at the top!
+    // I will dynamically import it here to be safe if it's not at the top.
+    const DoctorAvailability = (await import('./model/DoctorAvailability.js')).default;
+    await DoctorAvailability.deleteMany();
+    
+    for (const d of docs) {
+      await DoctorAvailability.create({
+        doctor: d._id,
+        day: 'Mon',
+        startTime: '09:00 AM',
+        endTime: '12:00 PM',
+        type: 'available',
+        consultType: 'Physical',
+        maxPatients: 10,
+        repeat: 'weekly'
+      });
+      await DoctorAvailability.create({
+        doctor: d._id,
+        day: 'Wed',
+        startTime: '02:00 PM',
+        endTime: '05:00 PM',
+        type: 'available',
+        consultType: 'Video',
+        maxPatients: 5,
+        repeat: 'weekly'
+      });
+      await DoctorAvailability.create({
+        doctor: d._id,
+        day: 'daily',
+        startTime: '06:00 PM',
+        endTime: '08:00 PM',
+        type: 'available',
+        consultType: 'Both',
+        maxPatients: 15,
+        repeat: 'daily'
+      });
+    }
     // ==========================================
     // 3. PATIENTS (5)
     // ==========================================
