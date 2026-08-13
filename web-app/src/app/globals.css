@@ -769,3 +769,9 @@ textarea.input { resize: vertical; min-height: 100px; }
   min-height: 52px;
   min-width: 52px;
 }
+
+/* Hide Google Translate Toolbar */
+.VIpgJd-ZVi9od-ORHb-OEVmcd { display: none !important; }
+.goog-te-banner-frame { display: none !important; }
+body { top: 0 !important; }
+.goog-te-gadget { display: none !important; }
