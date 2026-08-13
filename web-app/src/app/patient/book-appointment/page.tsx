@@ -242,11 +242,20 @@ export default function BookAppointmentPage() {
                     onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.borderColor = '#E9E5F8'; e.currentTarget.style.transform = 'none'; } }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                      <div style={{ width: 44, height: 44, borderRadius: '50%', background: isSelected ? 'rgba(255,255,255,0.2)' : 'linear-gradient(135deg, #A855F7, #7B2FF7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', color: 'white', fontWeight: 700, flexShrink: 0 }}>
-                        {doc.photo ? <img src={`${API}${doc.photo}`} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} /> : doc.name[0]}
+                      <div style={{ width: 44, height: 44, borderRadius: '50%', background: isSelected ? 'rgba(255,255,255,0.2)' : 'linear-gradient(135deg, #A855F7, #7B2FF7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', color: 'white', fontWeight: 700, flexShrink: 0, overflow: 'hidden' }}>
+                        {doc.photo ? (
+                          <img 
+                            src={doc.photo.startsWith('http') ? doc.photo : `${API}${doc.photo}`} 
+                            alt="" 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerText = doc.name.replace('Dr. ', '')[0]; }}
+                          />
+                        ) : (
+                          doc.name.replace('Dr. ', '')[0]
+                        )}
                       </div>
                       <div>
-                        <div style={{ fontWeight: 700, color: isSelected ? 'white' : '#1A0A3C', fontSize: '0.95rem' }}>Dr. {doc.name}</div>
+                        <div style={{ fontWeight: 700, color: isSelected ? 'white' : '#1A0A3C', fontSize: '0.95rem' }}>{doc.name.startsWith('Dr.') ? doc.name : `Dr. ${doc.name}`}</div>
                         <div style={{ fontSize: '0.78rem', color: isSelected ? 'rgba(255,255,255,0.7)' : '#7B2FF7', fontWeight: 600 }}>{doc.specialization || 'General Practitioner'}</div>
                       </div>
                     </div>
