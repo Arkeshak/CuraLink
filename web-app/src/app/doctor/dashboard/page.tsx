@@ -34,7 +34,8 @@ const ACTIONS = [
 
 export default function DoctorDashboard() {
   const { user } = useAuth();
-  const firstName = user?.name?.split(' ')[0] ?? 'Doctor';
+  const cleanName = user?.name?.replace(/^Dr\.\s*/i, '') || 'Doctor';
+  const firstName = cleanName.split(' ')[0];
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
