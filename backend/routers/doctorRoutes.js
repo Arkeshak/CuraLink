@@ -5,6 +5,7 @@ import {
   updateDoctorProfile, 
   getAllDoctors,
   getDoctorSchedule,
+  getDoctorScheduleForPatient,
   createDoctorSchedule,
   updateDoctorSchedule,
   deleteDoctorSchedule,
@@ -24,6 +25,7 @@ const router = express.Router();
 // Public / Patient Routes
 router.get('/specialties', getSpecialties);
 router.get('/:id/availability', getDoctorAvailabilityForPatient);
+router.get('/:id/schedule', getDoctorScheduleForPatient);
 router.get('/', getAllDoctors);
 
 // Require login for all routes below

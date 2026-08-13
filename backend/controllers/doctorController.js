@@ -198,6 +198,18 @@ export const getDoctorSchedule = async (req, res) => {
   }
 };
 
+// @desc    Get all schedule slots for a specific doctor (Public/Patient access)
+// @route   GET /api/doctor/:id/schedule
+// @access  Public
+export const getDoctorScheduleForPatient = async (req, res) => {
+  try {
+    const slots = await DoctorAvailability.find({ doctor: req.params.id });
+    res.json({ success: true, data: slots });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+};
+
 // @desc    Create a new schedule slot
 // @route   POST /api/doctor/schedule
 // @access  Private (Doctor only)

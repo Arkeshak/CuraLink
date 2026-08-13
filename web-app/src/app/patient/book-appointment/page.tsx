@@ -17,7 +17,8 @@ interface Doctor {
 }
 
 interface Slot {
-  _id: string;
+  _id?: string;
+  id?: string;
   day: string;
   startTime: string;
   endTime: string;
@@ -102,7 +103,7 @@ export default function BookAppointmentPage() {
     setError('');
     setSlotsLoading(true);
     try {
-      const res = await fetch(`${API}/api/doctor/${doc._id}/availability`, {
+      const res = await fetch(`${API}/api/doctor/${doc._id}/schedule`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -282,7 +283,7 @@ export default function BookAppointmentPage() {
               {/* Doctor header */}
               <div style={{ background: 'linear-gradient(135deg, #130531, #2D0A6B)', padding: '1.5rem', color: 'white' }}>
                 <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '1.15rem', marginBottom: '0.2rem' }}>
-                  Dr. {selectedDoctor.name}
+                  {selectedDoctor.name.startsWith('Dr.') ? selectedDoctor.name : `Dr. ${selectedDoctor.name}`}
                 </div>
                 <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>{selectedDoctor.specialization}</div>
               </div>
@@ -302,10 +303,10 @@ export default function BookAppointmentPage() {
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {slots.map((slot) => {
-                        const isSelected = selectedSlot?._id === slot._id;
+                        const isSelected = (selectedSlot?._id || selectedSlot?.id) === (slot._id || slot.id);
                         return (
                           <button
-                            key={slot._id}
+                            key={slot._id || slot.id}
                             onClick={() => { setSelectedSlot(slot); setSelectedDate(''); }}
                             style={{
                               padding: '0.75rem 1rem', borderRadius: 12, textAlign: 'left',
