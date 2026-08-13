@@ -206,7 +206,7 @@ export default function DoctorSlotsPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.875rem' }}>
                 {byDay[day].map((slot) => (
-                  <div key={slot._id} style={{ background: 'white', borderRadius: 16, padding: '1.25rem', border: '1.5px solid #E0F2FE', boxShadow: '0 1px 4px rgba(3,105,161,0.06)', position: 'relative' }}>
+                  <div key={slot._id || slot.id} style={{ background: 'white', borderRadius: 16, padding: '1.25rem', border: '1.5px solid #E0F2FE', boxShadow: '0 1px 4px rgba(3,105,161,0.06)', position: 'relative' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <div>
                         <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize: '1.1rem', color: '#0C4A6E' }}>
@@ -226,8 +226,8 @@ export default function DoctorSlotsPage() {
                       </div>
                     )}
                     <button
-                      onClick={() => deleteSlot(slot._id)}
-                      disabled={deletingId === slot._id}
+                      onClick={() => deleteSlot(slot._id || slot.id)}
+                      disabled={deletingId === (slot._id || slot.id)}
                       style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', width: 28, height: 28, borderRadius: 8, background: '#FEE2E2', border: 'none', cursor: 'pointer', color: '#EF4444', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                       ×
