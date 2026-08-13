@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  # ── MongoDB ──────────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:7
+    container_name: curalink-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: curalink
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - curalink-net
+
+  # ── CuraLink Backend (Node/Express) ─────────────────────────────────────────
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: curalink-backend
+    restart: unless-stopped
+    env_file:
+      - ../backend/.env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/curalink
+      WEB_APP_URL: http://localhost:3000
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    volumes:
+      - ../backend/uploads:/app/uploads
+    networks:
+      - curalink-net
+
+  # ── CuraLink Web App (Next.js) ───────────────────────────────────────────────
+  web-app:
+    build:
+      context: ../web-app
+      dockerfile: Dockerfile
+    container_name: curalink-webapp
+    restart: unless-stopped
+    env_file:
+      - ../web-app/.env.local
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:5000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    networks:
+      - curalink-net
+
+volumes:
+  mongo_data:
+
+networks:
+  curalink-net:
+    driver: bridge
